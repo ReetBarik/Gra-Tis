@@ -188,6 +188,7 @@ void MetisGraphPartitioner( graph *G, long *VertexPartitioning, int numParts, lo
 
     returnVal = METIS_PartGraphKway(&nvtxs, &ncon, xadj, adjncy, vwgt, NULL, adjwgt, 
                           &nparts, NULL, NULL, options, &objval, part);
+    free(vwgt);
   }
 
   if(returnVal == METIS_OK)
