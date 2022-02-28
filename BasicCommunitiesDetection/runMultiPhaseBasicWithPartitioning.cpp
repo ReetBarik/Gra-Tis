@@ -113,6 +113,11 @@ void runMultiPhaseBasicWithPartitioning(graph *G, long *C_orig, int basicOpt, lo
             }
         }
         printf("Done updating C_orig\n");
+
+        if (numClusters <= nParts) {
+            // shouldn't send a graph to METIS with n < #partitions
+            break;
+        }
         
         //build the graph for next phase
         //In case coloring is used, make sure the non-coloring routine is run at least once
@@ -121,15 +126,15 @@ void runMultiPhaseBasicWithPartitioning(graph *G, long *C_orig, int basicOpt, lo
         tmpTime =  buildNextLevelGraphOpt(G, Gnew, C, numClusters, numThreads);
         totTimeBuildingPhase += tmpTime;
         //Free up the previous graph
-        free(G->edgeListPtrs);
-        free(G->edgeList);
-        free(G);
+        //free(G->edgeListPtrs);
+        //free(G->edgeList);
+        //free(G);
         G = Gnew; //Swap the pointers
         G->edgeListPtrs = Gnew->edgeListPtrs;
         G->edgeList = Gnew->edgeList;
         
         //Free up the previous cluster & create new one of a different size
-        free(C);
+        //free(C);
         C = (long *) malloc (numClusters * sizeof(long)); assert(C != 0);
             
 #pragma omp parallel for
@@ -166,7 +171,7 @@ void runMultiPhaseBasicWithPartitioning(graph *G, long *C_orig, int basicOpt, lo
 
 
     /* Step 2: Find Partitions */
-    free(C);
+    //free(C);
     long numV = G->numVertices;
     C = (long *) malloc (numV * sizeof(long));
     assert(C != 0);
@@ -204,10 +209,10 @@ void runMultiPhaseBasicWithPartitioning(graph *G, long *C_orig, int basicOpt, lo
     printf("********************************************\n");
     
     //Clean up:
-    free(C);
+    //free(C);
     if(G != 0) {
-        free(G->edgeListPtrs);
-        free(G->edgeList);
-        free(G);
+    //    free(G->edgeListPtrs);
+    //    free(G->edgeList);
+    //    free(G);
     }
 }//End of runMultiPhaseBasicWithPartitioning()

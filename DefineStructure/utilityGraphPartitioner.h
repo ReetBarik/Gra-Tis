@@ -161,8 +161,7 @@ void MetisGraphPartitioner( graph *G, long *VertexPartitioning, int numParts, lo
  
   idx_t options[METIS_NOPTIONS];
   METIS_SetDefaultOptions(options);
-  // options[METIS OPTION PTYPE] = METIS_PTYPE_RB; //Multilevel recursive bisectioning
-  // options[METIS OPTION UFACTOR] = 0;
+
   options[METIS_OPTION_OBJTYPE] = METIS_OBJTYPE_CUT; //Edgecut minimization
   options[METIS_OPTION_CTYPE] = METIS_CTYPE_SHEM; //Sorted heavy-edge matching
   options[METIS_OPTION_NUMBERING]= 0; //C-style numbering, starting from 0
@@ -189,7 +188,7 @@ void MetisGraphPartitioner( graph *G, long *VertexPartitioning, int numParts, lo
 
     returnVal = METIS_PartGraphKway(&nvtxs, &ncon, xadj, adjncy, vwgt, NULL, adjwgt, 
                           &nparts, NULL, NULL, options, &objval, part);
-    free(vwgt);
+    //free(vwgt);
   }
 
   if(returnVal == METIS_OK)
@@ -207,9 +206,9 @@ void MetisGraphPartitioner( graph *G, long *VertexPartitioning, int numParts, lo
   }
   
   //Cleaup:
-  free(xadj); free(adjncy); free(adjwgt);
-  free(part);
-  //printf("Returning back from Metis\n");
+  //free(xadj); free(adjncy); free(adjwgt);
+  //free(part);
+  printf("Returning back from Metis\n");
 }
 
 #endif
